@@ -1,5 +1,4 @@
-using API.Data;
-using Microsoft.EntityFrameworkCore;
+using API.Extensions;
 
 internal class Program
 {
@@ -10,11 +9,10 @@ internal class Program
         // ***** Add services to the container *****
 
         builder.Services.AddControllers();
-        builder.Services.AddDbContext<DataContext>(opt => 
-        {
-            opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
-        });
-        builder.Services.AddCors();
+
+        // Call extension methods from API.Extensions
+        builder.Services.AddApplicationServices(builder.Configuration);
+        builder.Services.AddIdentityServices(builder.Configuration);        
 
         var app = builder.Build();
 
@@ -22,6 +20,10 @@ internal class Program
 
         // Define the CORS policy builder
         app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+
+        // Authentication middleware to be added after UserCors and before MapControllers
+        app.UseAuthentication();    // Checks if a token is present.
+        app.UseAuthorization();     // Authorizes the user if the token is valid.
 
         app.MapControllers();
 
