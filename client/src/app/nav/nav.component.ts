@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../_services/account.service';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-import { Observable, of } from 'rxjs';
-import { IUser } from '../_models/user';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-nav',
@@ -16,7 +16,8 @@ export class NavComponent implements OnInit {
   // Use rxjs.of() to assign an initial null value to an observable
   // currentUser$: Observable<IUser | null> = of(null);
 
-  constructor(public accountService: AccountService) {}
+  constructor(
+    public accountService: AccountService, private router: Router, private toastr: ToastrService) {}
   
   ngOnInit(): void {
     // this.getCurrentUser();
@@ -34,16 +35,17 @@ export class NavComponent implements OnInit {
   login() {
     // Since login() returns an observable, we need to use the subscribe function.
     this.accountService.login(this.model).subscribe({
-      next: response => {
-        console.log(response);
-        // this.loggedIn = true;
-      },
-      error: error => console.log(error)
+      next: () => this.router.navigateByUrl('/members'),
+      error: error => {
+        console.log(error);
+        this.toastr.error(error.error);
+      }
     })
   }
 
   logout() {
     this.accountService.logout();
+    this.router.navigateByUrl('/');
     // this.loggedIn = false;
   }
 
