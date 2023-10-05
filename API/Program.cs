@@ -1,4 +1,5 @@
 using API.Extensions;
+using API.Middleware;
 
 internal class Program
 {
@@ -15,6 +16,15 @@ internal class Program
         builder.Services.AddIdentityServices(builder.Configuration);        
 
         var app = builder.Build();
+
+        // Exception Handling
+        app.UseMiddleware<ExceptionMiddleware>();
+
+        // Exception Handling for .NET 5 and below
+        // if (builder.Environment.IsDevelopment())
+        // {
+        //     app.UseDeveloperExceptionPage();
+        // }
 
         // ***** Configure the HTTP request pipeline *****
 
