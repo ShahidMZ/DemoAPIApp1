@@ -1,6 +1,9 @@
 ﻿using API.Controllers;
 using API.Data;
+using API.DTOs;
 using API.Entities;
+using API.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,25 +13,45 @@ namespace API.Controller;
 [Authorize]
 public class UsersController : BaseApiController
 {
-    private readonly DataContext context;
+    private readonly IUserRepository userRepository;
+    private readonly IMapper mapper;
 
-    public UsersController(DataContext context)
+    public UsersController(IUserRepository userRepository, IMapper mapper)
     {
-        this.context = context;
+        this.userRepository = userRepository;
+        this.mapper = mapper;
     }
 
-    [AllowAnonymous]
+    // [AllowAnonymous]
     [HttpGet] // /api/users
-    public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
+    public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers()
     {
-        var userList = this.context.Users.ToListAsync();
+        return Ok(await this.userRepository.GetMembersAsync());
 
-        return await userList;
+        // return Ok(await this.userRepository.GetUsersAsync());
+
+        // var users = await this.userRepository.GetUsersAsync();
+        // var usersToReturn = this.mapper.Map<IEnumerable<MemberDTO>>(users);
+        
+        // return Ok(usersToReturn);
     }
 
-    [HttpGet("{id}")] // /api/users/2
-    public async Task<ActionResult<AppUser>> GetUser(int id)
+    // [HttpGet("{id}")] // /api/users/2
+    // public async Task<ActionResult<MemberDTO>> GetUser(int id)
+    // {
+    //     var user = await this.userRepository.GetUserByIdAsync(id);
+    //     var userToReturn = this.mapper.Map<MemberDTO>(user);
+
+    //     return userToReturn;
+    // }
+
+    [HttpGet("{username}")] // /api/users/username
+    public async Task<ActionResult<MemberDTO>> GetUser(string username)
     {
-        return await this.context.Users.FindAsync(id);
+        return await this.userRepository.GetMemberAsync(username);
+        // var user = await this.userRepository.GetUserByUsernameAsync(username);
+        // var userToReturn = this.mapper.Map<MemberDTO>(user);
+
+        // return userToReturn;
     }
 }

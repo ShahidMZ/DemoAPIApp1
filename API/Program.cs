@@ -1,9 +1,11 @@
+using API.Data;
 using API.Extensions;
 using API.Middleware;
+using Microsoft.EntityFrameworkCore;
 
 internal class Program
 {
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,8 @@ internal class Program
 
         var app = builder.Build();
 
+        // ***** Configure the HTTP request pipeline *****
+
         // Exception Handling
         app.UseMiddleware<ExceptionMiddleware>();
 
@@ -25,8 +29,6 @@ internal class Program
         // {
         //     app.UseDeveloperExceptionPage();
         // }
-
-        // ***** Configure the HTTP request pipeline *****
 
         // Define the CORS policy builder
         app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
@@ -37,6 +39,28 @@ internal class Program
 
         app.MapControllers();
 
+        // Seed Database.
+        await SeedDatabase(app);
+
         app.Run();
+    }
+
+    public static async Task SeedDatabase(WebApplication app)
+    {
+        // Gives access to all the services present in the Program class.
+        using var scope = app.Services.CreateScope();
+        var services = scope.ServiceProvider;
+
+        try
+        {
+            var context = services.GetRequiredService<DataContext>();
+            await context.Database.MigrateAsync();
+            await Seed.SeedUsers(context);
+        }
+        catch (Exception ex)
+        {
+            var logger = services.GetService<ILogger<Program>>();
+            logger.LogError(ex, "An error occurred during migration.");
+        }
     }
 }
