@@ -1,1 +1,93 @@
-<p>member-detail works!</p>
+<div class="row" *ngIf="member">
+    <div class="col-4">
+        <div class="card">
+            <h1 class="card-body">{{member.knownAs}}</h1>
+            <img src="{{member.photoUrl || './assets/user.png'}}" alt="{{member.knownAs}}"
+                class="card-img-top img-thumbnail">
+            <div class="card-body">
+                <div>
+                    <strong>Location: </strong>
+                    <p>{{member.city}}, {{member.country}}</p>
+                </div>
+                <div>
+                    <strong>Age: </strong>
+                    <p>{{member.age}}</p>
+                </div>
+                <div>
+                    <strong>Last Active: </strong>
+                    <p>{{member.lastActive}}</p>
+                </div>
+                <div>
+                    <strong>Member Since: </strong>
+                    <p>{{member.created}}</p>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="btn-group d-flex">
+                    <button class="btn btn-primary me-3">Like</button>
+                    <button class="btn btn-success">Message</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-8">
+        <tabset class="member-tabset">
+            <tab heading="About {{member.knownAs}}">
+                <div class="member-tab-body">
+                    <h4>Description </h4>
+                    <p>{{member.introduction}}</p>
+                    <h4>Looking For </h4>
+                    <p>{{member.lookingFor}}</p>
+                </div>
+            </tab>
+            <tab heading="Interests">
+                <div class="member-tab-body">
+                    <h4>Interests</h4>
+                    <p>{{member.interests}}</p>
+                </div>
+            </tab>
+            <tab heading="Photos" #photoTab="tab">
+                <div class="member-tab-body">
+                    <!-- <gallery *ngIf="photoTab.active" [items]="images" class="gallery"></gallery> -->
+                    <carousel [isAnimated]="true" [noPause]="false">
+                        <slide *ngFor="let photo of photos">
+                            <div style="background-color: dimgrey;">
+                                <img src="{{photo.url}}" alt="{{photo.id}}"
+                                style="display: block; width: auto; height: 466px; margin: 0 auto;">
+                            </div>
+                        </slide>
+                        <slide>
+                            <img src="./assets/images/nature/1.jpg" alt="first slide"
+                                style="display: block; width: 100%;">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h3>First slide label</h3>
+                                <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                            </div>
+                        </slide>
+                        <slide>
+                            <img src="./assets/images/nature/2.jpg" alt="second slide"
+                                style="display: block; width: 100%;">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h3>Second slide label</h3>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </slide>
+                        <slide>
+                            <img src="./assets/images/nature/3.jpg" alt="third slide"
+                                style="display: block; width: 100%;">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h3>Third slide label</h3>
+                                <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+                            </div>
+                        </slide>
+                    </carousel>
+                </div>
+            </tab>
+            <tab heading="Messages">
+                <div class="member-tab-body">
+                    <p>Messages will go here.</p>
+                </div>
+            </tab>
+        </tabset>
+    </div>
+</div>

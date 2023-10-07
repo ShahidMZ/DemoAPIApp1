@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 export class RegisterComponent implements OnInit {
   // Parent to child communication: Getting the users list from the home component.
   // @Input() usersFromHomeComponent: any;
-  // Child to parent communication: Emitting the canel register value to home component.
+  // Child to parent communication: Emitting the cancel register value to home component.
   @Output() cancelRegister = new EventEmitter();
   model: any = {}
 

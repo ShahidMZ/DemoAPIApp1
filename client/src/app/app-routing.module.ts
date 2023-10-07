@@ -22,7 +22,7 @@ const routes: Routes = [
       // Matches link.
       {path: 'members', component: MemberListComponent},
       // ':id' represents a route parameter.
-      {path: 'members/:id', component: MemberDetailComponent},
+      {path: 'members/:username', component: MemberDetailComponent},
       // Lists link.
       {path: 'lists', component: ListsComponent},
       // Messages link.
