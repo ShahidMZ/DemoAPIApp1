@@ -16,5 +16,7 @@ public class AutoMapperProfiles : Profile
             .ForMember(dest => dest.PhotoUrl, opt => opt.MapFrom(src => src.Photos.FirstOrDefault(x => x.IsMain).Url))
             .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.DateOfBirth.CalculateAge()));
         CreateMap<Photo, PhotoDTO>();
+        // Map the content of MemberUpdate DTO (which has new data from the client) to the corresponding fields in the AppUser.
+        CreateMap<MemberUpdateDTO, AppUser>();
     }
 }

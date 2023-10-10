@@ -1,4 +1,5 @@
-﻿using API.Controllers;
+﻿using System.Security.Claims;
+using API.Controllers;
 using API.Data;
 using API.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -38,7 +39,7 @@ public class BuggyController : BaseApiController
         var user = this.context.Users.Find(-1);
 
         var toReturn = user.ToString();
-
+        
         return toReturn;
         
     }

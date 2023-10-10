@@ -9,12 +9,14 @@ import { AuthGuard } from './_guards/auth.guard';
 import { TestErrorComponent } from './errors/test-error/test-error.component';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
+import { MemberEditComponent } from './members/member-edit/member-edit.component';
+import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
 
 const routes: Routes = [
-  // Chapter 66
+  // Chapter 66 - Creating some more components.
   // Loads app home when no route is present.
   {path: '', component: HomeComponent},
-  // Protect all children under AuthGuard
+  // Protect all children under AuthGuard.
   {path: '',
     runGuardsAndResolvers: 'always',
     canActivate: [AuthGuard],
@@ -23,6 +25,8 @@ const routes: Routes = [
       {path: 'members', component: MemberListComponent},
       // ':id' represents a route parameter.
       {path: 'members/:username', component: MemberDetailComponent},
+      // Edit Profile link. Also, add the canDeactivate guard.
+      {path: 'member/edit', component: MemberEditComponent, canDeactivate: [PreventUnsavedChangesGuard]},
       // Lists link.
       {path: 'lists', component: ListsComponent},
       // Messages link.

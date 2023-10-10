@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 export class AccountService {
   baseUrl = environment.apiUrl;
   
-  // Chapter 57
+  // Chapter 57 - Persisting the login.
   // <IUser | null> is a union type where an object can have multiple datatypes.
   private currentUserSource = new BehaviorSubject<IUser | null>(null);
   // $ suffix is used to identify observables
