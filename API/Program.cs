@@ -15,7 +15,7 @@ internal class Program
 
         // Call extension methods from API.Extensions
         builder.Services.AddApplicationServices(builder.Configuration);
-        builder.Services.AddIdentityServices(builder.Configuration);        
+        builder.Services.AddIdentityServices(builder.Configuration);
 
         var app = builder.Build();
 

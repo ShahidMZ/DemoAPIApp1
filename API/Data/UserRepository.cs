@@ -20,7 +20,7 @@ public class UserRepository : IUserRepository
 
     public async Task<MemberDTO> GetMemberAsync(string username)
     {
-        // Project the AppUser to the MemberDTO. Eager Loading of the photos is ont required when you're projecting.
+        // Project the AppUser to the MemberDTO. Eager Loading of the photos is not required when you're projecting.
         return await this.context.Users
             .Where(x => x.UserName == username)
             .ProjectTo<MemberDTO>(this.mapper.ConfigurationProvider)

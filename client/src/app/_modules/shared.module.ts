@@ -5,6 +5,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ToastrModule } from 'ngx-toastr';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { FileUploadModule } from 'ng2-file-upload';
 
 @NgModule({
   declarations: [],
@@ -16,14 +17,16 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right'
     }),
-    NgxSpinnerModule.forRoot({ type: 'line-scale-pulse-out'})
+    NgxSpinnerModule.forRoot({ type: 'line-scale-pulse-out'}),
+    FileUploadModule
   ],
   exports: [
     BsDropdownModule,
     ToastrModule,
     TabsModule,
     CarouselModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    FileUploadModule
   ]
 })
 export class SharedModule { }

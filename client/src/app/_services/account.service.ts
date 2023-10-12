@@ -21,10 +21,7 @@ export class AccountService {
   login(model: any) {
     return this.http.post<IUser>(this.baseUrl + 'account/login', model).pipe(
       map((user: IUser) => {
-        if (user) {
-          localStorage.setItem('user', JSON.stringify(user));
-          this.setCurrentUser(user);
-        }
+        this.setCurrentUser(user);
       })
     );    
   }
@@ -32,10 +29,7 @@ export class AccountService {
   register(model: any) {
     return this.http.post<IUser>(this.baseUrl + 'account/register', model).pipe(
       map((user: IUser) => {
-        if (user) {
-          localStorage.setItem('user', JSON.stringify(user));
-          this.currentUserSource.next(user);
-        }
+        this.setCurrentUser(user);
         // If the response is to be returned while using the map method, it must be returned within the map method itself.
         // return user;
       })
@@ -48,6 +42,9 @@ export class AccountService {
   }
 
   setCurrentUser(user: IUser) {
-    this.currentUserSource.next(user);
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user));
+      this.currentUserSource.next(user);
+    }
   }
 }

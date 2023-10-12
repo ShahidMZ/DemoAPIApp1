@@ -1,7 +1,7 @@
 <div class="row">
     <!-- Use the async pipe to subscribe to the members$ observable -->
     <ng-container *ngFor="let currentMember of members$ | async">
-        <div class="col-2" *ngIf="currentMember.userName != currentUser">
+        <div class="col-2 mt-3" *ngIf="currentMember.userName != currentUser">
             <app-member-card [member]="currentMember"></app-member-card>
         </div>
     </ng-container>

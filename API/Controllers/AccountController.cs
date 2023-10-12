@@ -58,7 +58,7 @@ public class AccountController : BaseApiController
     {
         // Can use Users.SingleOrDefaultAsync to get the user with the unique username from db 
         // or can use Users.FirstOrDefaultAsync to get the first user with the username.
-        var user = await this.context.Users.SingleOrDefaultAsync(x => x.UserName == loginDTO.Username);
+        var user = await this.context.Users.Include(p => p.Photos).SingleOrDefaultAsync(x => x.UserName == loginDTO.Username);
 
         // Check if username exists in the db.
         if (user == null)
@@ -84,7 +84,8 @@ public class AccountController : BaseApiController
         return new UserDTO
         {
             Username = user.UserName,
-            Token = this.tokenService.CreateToken(user)
+            Token = this.tokenService.CreateToken(user),
+            PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url
         };
     }
 

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Member } from '../_models/member';
 import { map, of, pipe } from 'rxjs';
+import { Photo } from '../_models/photo';
 
 @Injectable({
   providedIn: 'root'
@@ -52,6 +53,16 @@ export class MembersService {
     //     this.members[index] = {...this.members[index], ...member};
     //   })
     // )
+  }
+
+  setMainPhoto(photoId: number) {
+    // Since this is a put request, pass an empty object as a variable.
+    return this.http.put(this.baseUrl + 'users/set-main-photo/' + photoId, {});
+  }
+
+  deletePhoto(photoId: number) {
+    // No need to pass variables for a delete request.
+    return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
   }
 
   // Implemented in JwtInterceptor
