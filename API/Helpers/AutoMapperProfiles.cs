@@ -18,5 +18,6 @@ public class AutoMapperProfiles : Profile
         CreateMap<Photo, PhotoDTO>();
         // Map the content of MemberUpdate DTO (which has new data from the client) to the corresponding fields in the AppUser.
         CreateMap<MemberUpdateDTO, AppUser>();
+        CreateMap<RegisterDTO, AppUser>();
     }
 }

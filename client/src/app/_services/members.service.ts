@@ -45,11 +45,12 @@ export class MembersService {
   updateMember(member: Member) {
     return this.http.put(this.baseUrl + 'users', member);
 
-    // Code from Udemy:
-    // Using the spread operator (...).
+    // // Code from Udemy:
+    // // Using the spread operator (...).
     // return this.http.put(this.baseUrl + 'users', member).pipe(
     //   map(() => {
     //     const index = this.members.indexOf(member);
+    //     // The spread operator spreads the properties of the specified member in the members[] array and copies the properties of the member object to it.
     //     this.members[index] = {...this.members[index], ...member};
     //   })
     // )

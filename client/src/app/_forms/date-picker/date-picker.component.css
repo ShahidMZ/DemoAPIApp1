@@ -1,0 +1,9 @@
+input {
+    border: 2px solid grey;
+    width: 30%;
+    margin: auto;
+}
+
+input[type=text] & input[type=password] {
+    min-width: 200px;
+}

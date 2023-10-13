@@ -63,6 +63,15 @@ export class PhotoEditorComponent implements OnInit {
       if (response) {
         const photo = JSON.parse(response);
         this.member?.photos.push(photo);
+
+        // Code to update the user and member observables on new user's first photo upload.
+        if (photo.isMain && this.user && this.member) {
+          // If the photo uploaded is the first photo of a user, the API automatically makes it the main photo.
+          // Any other photo won't pass the photo.isMain test.
+          this.user.photoUrl = photo.url;
+          this.member.photoUrl = photo.url;
+          this.accountService.setCurrentUser(this.user);
+        }
       }
     }
   }

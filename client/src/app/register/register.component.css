@@ -1,0 +1,15 @@
+input[type=radio] {
+    margin-left: 15px;
+    cursor: pointer;
+}
+
+input[type=radio]:hover {
+    background-color: #ccc;
+}
+
+.errors {
+    text-align: left;
+    width: 30%;
+    margin: auto;
+    min-width: 300px;
+}

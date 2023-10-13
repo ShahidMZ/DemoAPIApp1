@@ -5,6 +5,7 @@ using API.Data.Migrations;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,11 +15,13 @@ public class AccountController : BaseApiController
 {
     private readonly DataContext context;
     private readonly ITokenService tokenService;
+    private readonly IMapper mapper;
 
-    public AccountController(DataContext context, ITokenService tokenService)
+    public AccountController(DataContext context, ITokenService tokenService, IMapper mapper)
     {
         this.context = context;
         this.tokenService = tokenService;
+        this.mapper = mapper;
     }
 
     // Task<ActionResult<>> is required if returning HTTP messages like BadRequest or Unauthorized. For other async methods, Task<> will suffice.
@@ -31,16 +34,16 @@ public class AccountController : BaseApiController
             return BadRequest("Username is taken");
         }
 
+        // Map the fields of RegisterDTO to a new AppUser
+        AppUser user = this.mapper.Map<AppUser>(registerDTO);
+
         // The "using" directive can be used to dispose the object of an IDisposable class automatically. HMACSHA512 implements the IDisposable interface.
         using var hmac = new HMACSHA512();
         
-        // Create new AppUser with the username and password hash and salt.
-        var user = new AppUser
-        {
-            UserName = registerDTO.Username.ToLower(),
-            PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password)),
-            PasswordSalt = hmac.Key
-        };
+        // Update the AppUser with the username and password hash and salt.
+        user.UserName = registerDTO.Username.ToLower();
+        user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password));
+        user.PasswordSalt = hmac.Key;
 
         // Add the user to the db.
         this.context.Users.Add(user);
@@ -49,11 +52,12 @@ public class AccountController : BaseApiController
         return new UserDTO
         {
             Username = user.UserName,
-            Token = this.tokenService.CreateToken(user)
+            Token = this.tokenService.CreateToken(user),
+            KnownAs = user.KnownAs
         };
     }
 
-    [HttpPost("login")]
+    [HttpPost("login")] // POST: /api/account/login
     public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO)
     {
         // Can use Users.SingleOrDefaultAsync to get the user with the unique username from db 
@@ -85,7 +89,8 @@ public class AccountController : BaseApiController
         {
             Username = user.UserName,
             Token = this.tokenService.CreateToken(user),
-            PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url
+            PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
+            KnownAs = user.KnownAs
         };
     }
 
