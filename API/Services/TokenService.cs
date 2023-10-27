@@ -21,7 +21,8 @@ public class TokenService : ITokenService
         // Add the claim that this user is claiming to be user.UserName.
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.NameId, user.UserName)
+            new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
         };
 
         // Specify the credentials to be used.

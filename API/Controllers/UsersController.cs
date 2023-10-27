@@ -2,10 +2,12 @@
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controller;
 
@@ -24,10 +26,30 @@ public class UsersController : BaseApiController
     }
 
     // [AllowAnonymous]
-    [HttpGet] // /api/users
-    public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers()
+    [HttpGet] // /api/users?pageNumber=1&pageSize=10
+    public async Task<ActionResult<PagedList<MemberDTO>>> GetUsers([FromQuery]UserParams userParams)
     {
-        return Ok(await this.userRepository.GetMembersAsync());
+        // [FromQuery] specifies that the userparams are located in the URL query.
+        // [FromQuery, Required] will specify that the data field value is required.
+        // Not passing any parameters in the URL will set the default values for pageNumber and pageSize, set in the UserParams class.
+        
+        var currentUser = await this.userRepository.GetUserByUsernameAsync(User.GetUsername());
+        
+        // Set the currently logged in user's username in the user params.
+        userParams.CurrentUserName = currentUser.UserName;
+
+        if (userParams.Gender.IsNullOrEmpty())
+        {
+            // Set the opposite gender of the current user in the user params.
+            userParams.Gender = currentUser.Gender =="male" ? "female" : "male";
+        }
+
+        var users = await this.userRepository.GetMembersAsync(userParams);
+        
+        // Return the pagination information via the pagination header.
+        Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages));
+
+        return Ok(users);
 
         // return Ok(await this.userRepository.GetUsersAsync());
 

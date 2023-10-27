@@ -15,6 +15,10 @@ public static class ApplicationServiceExtensions
             opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
         });
 
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
+
         // Add CORS Policy
         services.AddCors();
 
@@ -30,6 +34,9 @@ public static class ApplicationServiceExtensions
         // Add the Cloudinary settings and photo service.
         services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
         services.AddScoped<IPhotoService, PhotoService>();
+
+        // Add the LogUserActivity action filter as a service.
+        services.AddScoped<LogUserActivity>();
 
         return services;
     }

@@ -60,3 +60,8 @@
 .gallery {
     height: 600px;
 }
+
+.center-contents {
+    display: flex;
+    justify-content: center;
+}

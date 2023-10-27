@@ -1,7 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using API.Data;
-using API.Data.Migrations;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
@@ -53,7 +52,8 @@ public class AccountController : BaseApiController
         {
             Username = user.UserName,
             Token = this.tokenService.CreateToken(user),
-            KnownAs = user.KnownAs
+            KnownAs = user.KnownAs,
+            Gender = user.Gender
         };
     }
 
@@ -90,7 +90,8 @@ public class AccountController : BaseApiController
             Username = user.UserName,
             Token = this.tokenService.CreateToken(user),
             PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
-            KnownAs = user.KnownAs
+            KnownAs = user.KnownAs,
+            Gender = user.Gender
         };
     }
 
