@@ -1,5 +1,7 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Member } from 'src/app/_models/member';
+import { MembersService } from 'src/app/_services/members.service';
 
 @Component({
   selector: 'app-member-card',
@@ -10,9 +12,15 @@ export class MemberCardComponent implements OnInit {
   // Type safety requires member to have undefined datatype initially.
   @Input() member: Member | undefined;
 
-  constructor() { }
+  constructor(private memberService: MembersService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     
+  }
+
+  addLike(mem: Member) {
+    this.memberService.addLike(mem.userName).subscribe({
+      next: () => this.toastr.success("You have liked " + this.member?.knownAs)
+    });
   }
 }

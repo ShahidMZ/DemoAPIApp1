@@ -38,6 +38,9 @@ public static class ApplicationServiceExtensions
         // Add the LogUserActivity action filter as a service.
         services.AddScoped<LogUserActivity>();
 
+        // Add the LikesRepository as a service.
+        services.AddScoped<ILikesRepository, LikesRepository>();
+
         return services;
     }
 }

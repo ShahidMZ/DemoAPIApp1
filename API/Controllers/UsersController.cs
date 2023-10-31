@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
-namespace API.Controller;
+namespace API.Controllers;
 
 [Authorize]
 public class UsersController : BaseApiController
@@ -31,7 +31,7 @@ public class UsersController : BaseApiController
     {
         // [FromQuery] specifies that the userparams are located in the URL query.
         // [FromQuery, Required] will specify that the data field value is required.
-        // Not passing any parameters in the URL will set the default values for pageNumber and pageSize, set in the UserParams class.
+        // Not passing any parameters in the URL will set the default values for pageNumber and pageSize, set in the PaginationParams class (which UserParams inherits).
         
         var currentUser = await this.userRepository.GetUserByUsernameAsync(User.GetUsername());
         

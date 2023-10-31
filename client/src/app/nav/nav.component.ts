@@ -19,7 +19,8 @@ export class NavComponent implements OnInit {
   // currentUser$: Observable<IUser | null> = of(null);
 
   constructor(
-    public accountService: AccountService, private router: Router, private toastr: ToastrService) {}
+    public accountService: AccountService, private router: Router, 
+      private toastr: ToastrService) {}
   
   ngOnInit(): void {
     this.getCurrentUser();
@@ -33,13 +34,15 @@ export class NavComponent implements OnInit {
         if (!user) return;
         this.user = user
       }
-    })
+    });
   }
 
   login() {
     // Since login() returns an observable, we need to use the subscribe function.
     this.accountService.login(this.model).subscribe({
-      next: () => this.router.navigateByUrl('/members'),
+      next: () => {
+        this.router.navigateByUrl('/members')
+      },
       error: error => {
         // Handled by the interceptor now.
         // console.log(error);

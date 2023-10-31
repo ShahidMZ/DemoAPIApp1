@@ -23,7 +23,7 @@ export class MembersService {
   // It is OK to inject a service into another service, as long as the second service is not injected into the first service, which creates a circular reference.
   // For instance, the AccountService is injected here. Now do NOT inject MemberService into AccountService.
   constructor(private http: HttpClient, private accountService: AccountService) {
-    this.accountService.currentUser$.pipe(take(1)).subscribe({
+    this.accountService.currentUser$.subscribe({
       next: user => {
         if (user) {
           this.userParams = new UserParams(user);
@@ -43,8 +43,8 @@ export class MembersService {
 
   resetUserParams() {
     if (this.user) {
-      console.log("In resetUserParams()");
       this.userParams = new UserParams(this.user);
+      console.log(this.userParams);
       return this.userParams;
     }
 
@@ -71,33 +71,6 @@ export class MembersService {
         return response;
       })
     );
-  }
-
-  private getPaginatedResult<T>(url: string, params: HttpParams) {
-    const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>();
-
-    // the http.get<>() method needs to be modified to get access to the full http response in order to pass the params.
-    return this.http.get<T>(url, { observe: 'response', params }).pipe(
-      map(response => {
-        if (response.body) {
-          paginatedResult.result = response.body;
-        }
-        const pagination = response.headers.get('Pagination');
-        if (pagination) {
-          paginatedResult.pagination = JSON.parse(pagination);
-        }
-        return paginatedResult;
-      })
-    );
-  }
-
-  getPaginationHeaders(pageNumber: number, pageSize: number) {
-    let params = new HttpParams();
-
-    params = params.append('pageNumber', pageNumber);
-    params = params.append('pageSize', pageSize);
-
-    return params;
   }
 
   // Before filtering was added (Chapter 162: Cleaning up the member service):
@@ -201,4 +174,46 @@ export class MembersService {
   //     })
   //   }
   // }
+
+  addLike(username: string) {
+    return this.http.post(this.baseUrl + 'likes/' + username, {});
+  }
+
+  getLikes(predicate: string, pageNumber: number, pageSize: number) {
+    let params = this.getPaginationHeaders(pageNumber, pageSize);
+    
+    params = params.append('predicate', predicate);
+
+    return this.getPaginatedResult<Member[]>(this.baseUrl + 'likes', params);
+
+    // Before pagination was added.
+    // return this.http.get<Member[]>(this.baseUrl + 'likes?predicate=' + predicate);
+  }
+
+  private getPaginatedResult<T>(url: string, params: HttpParams) {
+    const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>();
+
+    // the http.get<>() method needs to be modified to get access to the full http response in order to pass the params.
+    return this.http.get<T>(url, { observe: 'response', params }).pipe(
+      map(response => {
+        if (response.body) {
+          paginatedResult.result = response.body;
+        }
+        const pagination = response.headers.get('Pagination');
+        if (pagination) {
+          paginatedResult.pagination = JSON.parse(pagination);
+        }
+        return paginatedResult;
+      })
+    );
+  }
+
+  getPaginationHeaders(pageNumber: number, pageSize: number) {
+    let params = new HttpParams();
+
+    params = params.append('pageNumber', pageNumber);
+    params = params.append('pageSize', pageSize);
+
+    return params;
+  }
 }
