@@ -41,6 +41,9 @@ public static class ApplicationServiceExtensions
         // Add the LikesRepository as a service.
         services.AddScoped<ILikesRepository, LikesRepository>();
 
+        // Add the MessageRepository as a service.
+        services.AddScoped<IMessageRepository, MessageRepository>();
+
         return services;
     }
 }

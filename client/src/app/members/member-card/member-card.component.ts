@@ -20,7 +20,7 @@ export class MemberCardComponent implements OnInit {
 
   addLike(mem: Member) {
     this.memberService.addLike(mem.userName).subscribe({
-      next: () => this.toastr.success("You have liked " + this.member?.knownAs)
+      next: () => this.toastr.success("You have liked " + mem.knownAs)
     });
   }
 }

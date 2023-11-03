@@ -19,5 +19,8 @@ public class AutoMapperProfiles : Profile
         // Map the content of MemberUpdate DTO (which has new data from the client) to the corresponding fields in the AppUser.
         CreateMap<MemberUpdateDTO, AppUser>();
         CreateMap<RegisterDTO, AppUser>();
+        CreateMap<Message, MessageDTO>()
+            .ForMember(d => d.SenderPhotoUrl, o => o.MapFrom(s => s.Sender.Photos.FirstOrDefault(x => x.IsMain).Url))
+            .ForMember(d => d.RecipientPhotoUrl, o => o.MapFrom(s => s.Recipient.Photos.FirstOrDefault(x => x.IsMain).Url));
     }
 }

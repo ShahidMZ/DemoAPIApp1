@@ -11,6 +11,7 @@ import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
 import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
+import { MemberDetailedResolver } from './_resolvers/member-detailed.resolver';
 
 const routes: Routes = [
   // Chapter 66 - Creating some more components.
@@ -23,8 +24,8 @@ const routes: Routes = [
     children: [
       // Matches link.
       {path: 'members', component: MemberListComponent},
-      // ':id' represents a route parameter.
-      {path: 'members/:username', component: MemberDetailComponent},
+      // ':username' represents a route parameter.
+      {path: 'members/:username', component: MemberDetailComponent, resolve: {member: MemberDetailedResolver}},
       // Edit Profile link. Also, add the canDeactivate guard.
       {path: 'member/edit', component: MemberEditComponent, canDeactivate: [PreventUnsavedChangesGuard]},
       // Lists link.

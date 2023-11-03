@@ -19,6 +19,8 @@ public class AppUser
     public List<Photo> Photos { get; set; } = new();    // new(); is the same as new List<Object>();
     public List<UserLike> LikedByUsers { get; set; }    // List of users that like the current user.
     public List<UserLike> LikedUsers { get; set; }      // List of users liked by current user.
+    public List<Message> MessagesSent { get; set; }
+    public List<Message> MessagesReceived { get; set; }
 
     // public int GetAge()
     // {

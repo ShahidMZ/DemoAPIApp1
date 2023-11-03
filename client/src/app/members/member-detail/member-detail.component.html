@@ -1,4 +1,5 @@
-<div class="row" *ngIf="member">
+<!-- Before route resolver was added: <div class="row" *ngIf="member"> -->
+<div class="row">
     <div class="col-4">
         <div class="card">
             <h1 class="card-body">{{member.knownAs}}</h1>
@@ -24,15 +25,15 @@
             </div>
             <div class="card-footer">
                 <div class="btn-group d-flex">
-                    <button class="btn btn-primary me-3">Like</button>
-                    <button class="btn btn-success">Message</button>
+                    <button class="btn btn-primary me-3" (click)="addLike(member)">Like</button>
+                    <button class="btn btn-success" (click)="selectTab('Messages')">Message</button>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-8">
-        <tabset class="member-tabset">
-            <tab heading="About {{member.knownAs}}">
+        <tabset class="member-tabset" #memberTabs>
+            <tab heading="About {{member.knownAs}}" (selectTab)="onTabActivated($event)">
                 <div class="member-tab-body">
                     <h4>Description </h4>
                     <p>{{member.introduction}}</p>
@@ -40,13 +41,13 @@
                     <p>{{member.lookingFor}}</p>
                 </div>
             </tab>
-            <tab heading="Interests">
+            <tab heading="Interests" (selectTab)="onTabActivated($event)">
                 <div class="member-tab-body">
                     <h4>Interests</h4>
                     <p>{{member.interests}}</p>
                 </div>
             </tab>
-            <tab heading="Photos" #photoTab="tab">
+            <tab heading="Photos" #photoTab="tab" (selectTab)="onTabActivated($event)">
                 <div class="member-tab-body">
                     <!-- <gallery *ngIf="photoTab.active" [items]="images" class="gallery"></gallery> -->
                     <carousel [isAnimated]="true" [noPause]="false">
@@ -83,9 +84,9 @@
                     </carousel>
                 </div>
             </tab>
-            <tab heading="Messages">
+            <tab heading="Messages" (selectTab)="onTabActivated($event)">
                 <div class="member-tab-body">
-                    <p>Messages will go here.</p>
+                    <app-member-messages [messages]="messages" [username]="member.userName"></app-member-messages>
                 </div>
             </tab>
         </tabset>

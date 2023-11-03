@@ -9,7 +9,11 @@
                 <button class="btn btn-danger" (click)="addLike(member)"><i class="fa fa-heart"></i></button>
             </li>
             <li class="list-inline-item">
-                <button class="btn btn-success"><i class="fa fa-envelope"></i></button>
+                <button class="btn btn-success"
+                    routerLink="/members/{{member.userName}}"
+                    [queryParams]="{tab: 'Messages'}">
+                    <i class="fa fa-envelope"></i>
+                </button>
             </li>
         </ul>
     </div>

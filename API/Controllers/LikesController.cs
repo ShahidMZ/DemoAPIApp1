@@ -67,7 +67,7 @@ public class LikesController : BaseApiController
 
         var users = await this.likesRepository.GetUserLikes(likesParams);
 
-        // Since we need a pagination header, add it.
+        // Since we need a pagination header, add it to the response.
         Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize, 
             users.TotalCount, users.TotalPages));
 
